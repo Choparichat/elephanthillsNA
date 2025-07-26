@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Elephant Hills Package</title>
+  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+  <style>
+    body { font-family: Arial; max-width: 800px; margin: auto; padding: 20px; }
+    label { display: block; margin-top: 10px; }
+    input, select, button { width: 100%; padding: 8px; margin-top: 5px; }
+    #result { margin-top: 20px; padding: 10px; background: #f2f2f2; white-space: pre-line; }
+    .highlight { color: red; font-weight: bold; }
+    .yellow-highlight { background-color: yellow; font-weight: bold; }
+    #agentList { max-height: 120px; overflow-y: auto; border: 1px solid #ccc; display: none; position: absolute; background: #fff; width: calc(100% - 20px); z-index: 10; }
+    .agent-item { padding: 5px; cursor: pointer; }
+    .agent-item:hover { background-color: #eee; }
+  </style>
+</head>
+<body>
+
+<h2>Elephant Hills Package</h2>
+
+<label for="excelFile">Upload Agent Excel File (.xlsx):</label>
+<input type="file" id="excelFile" accept=".xlsx">
+
+<label for="agentSearch">Search Agent (Company or Email):</label>
+<input type="text" id="agentSearch" autocomplete="off">
+<div id="agentList"></div>
+
+<label for="package">Select Package:</label>
+<select id="package">
+  <option value="EH-JS2">EH-JS2</option>
+  <option value="EH-JS3">EH-JS3</option>
+  <option value="EH-JS4">EH-JS4</option>
+  <option value="EH-JLS3">EH-JLS3</option>
+  <option value="EH-JLS4">EH-JLS4</option>
+</select>
+
+<label for="month">Select Month:</label>
+<select id="month">
+  <option value="Jan">January</option><option value="Feb">February</option>
+  <option value="Mar">March</option><option value="Apr">April</option>
+  <option value="May">May</option><option value="Jun">June</option>
+  <option value="Jul">July</option><option value="Aug">August</option>
+  <option value="Sep">September</option><option value="Oct">October</option>
+  <option value="Nov">November</option><option value="Dec">December</option>
+</select>
+
+<label for="year">Select Year:</label>
+<select id="year">
+  <option value="2024">2024</option>
+  <option value="2025">2025</option>
+  <option value="2026">2026</option>
+</select>
+
+<label for="adults">Number of Adults:</label>
+<input type="number" id="adults" min="1" value="2">
+
+<label for="children">Number of Children:</label>
+<input type="number" id="children" min="0" value="0">
+
+<button onclick="calculatePrice()">Calculate Price</button>
+
+<div id="result"></div>
+
+<script>
+let agentData = [];
+const SINGLE_SUP_RATE = 6500;
+const PACKAGE_NIGHTS = {
+  'EH-JS2': 1,
+  'EH-JS3': 2,
+  'EH-JS4': 3,
+  'EH-JLS3': 2,
+  'EH-JLS4': 3
+};
+const prices = {
+  '2024': { high: {}, low: {} },
+  '2025': { high: {}, low: {} },
+  '2026': { high: {}, low: {} }
+};
+
+['Nov','Dec'].forEach(m => prices['2024'].high[m] = {
+  'EH-JS2':[17350,4338],'EH-JS3':[22900,5725],'EH-JS4':[28500,7125],'EH-JLS3':[26900,6725],'EH-JLS4':[36000,9000]
+});
+['Jan','Feb','Mar','Apr'].forEach(m => prices['2025'].high[m] = {
+  'EH-JS2':[17350,4338],'EH-JS3':[22900,5725],'EH-JS4':[28500,7125],'EH-JLS3':[26900,6725],'EH-JLS4':[36000,9000]
+});
+['Jul','Aug'].forEach(m => prices['2025'].high[m] = {
+  'EH-JLS3':[26900,6725],'EH-JLS4':[36000,9000]
+});
+['May','Jun','Sep','Oct'].forEach(m => prices['2025'].low[m] = {
+  'EH-JS2':[14600,1825],'EH-JS3':[21500,2688],'EH-JS4':[27100,3388],'EH-JLS3':[25700,3213],'EH-JLS4':[34000,4250]
+});
+['Nov','Dec','Jan','Feb','Mar','Apr'].forEach(m => prices['2026'].high[m] = {
+  'EH-JS2':[18220,4555],'EH-JS3':[24045,6011],'EH-JS4':[29925,7481],'EH-JLS3':[28790,7198],'EH-JLS4':[38520,9630]
+});
+['Jul','Aug'].forEach(m => prices['2026'].high[m] = {
+  'EH-JLS3':[28790,7198],'EH-JLS4':[38520,9630]
+});
+['May','Jun','Sep','Oct'].forEach(m => prices['2026'].low[m] = {
+  'EH-JS2':[15330,1916],'EH-JS3':[22575,2822],'EH-JS4':[28455,3557],'EH-JLS3':[27499,3437],'EH-JLS4':[36380,4548]
+});
+
+function parseRate(rateStr) {
+  const raw = rateStr?.toString().replace('%', '').trim();
+  const num = parseFloat(raw);
+  if (isNaN(num)) return 0;
+  return num > 1 ? num / 100 : num;
+}
+
+function getAgentDiscount() {
+  const raw = document.getElementById('agentSearch').dataset.selected;
+  if (!raw) return { rate: 0, info: null };
+  const agent = JSON.parse(raw);
+  return { rate: parseRate(agent.Rate), info: agent };
+}
+
+function isFreeKidsPromo(month) {
+  return ['May', 'Jun', 'Sep'].includes(month);
+}
+
+function calculatePrice() {
+  const adults = parseInt(document.getElementById("adults").value);
+  const children = parseInt(document.getElementById("children").value);
+  const pkg = document.getElementById("package").value;
+  const month = document.getElementById("month").value;
+  const year = document.getElementById("year").value;
+  const agentResult = getAgentDiscount();
+  const rate = agentResult.rate;
+  const agent = agentResult.info;
+  const season = prices[year]?.high?.[month] ? 'high' : 'low';
+  const base = prices[year]?.[season]?.[month]?.[pkg];
+
+  if (!base) {
+    document.getElementById("result").innerText = "No price data available.";
+    return;
+  }
+
+  const [baseAdult, baseChild] = base;
+  const discountedAdult = +(baseAdult * (1 - rate)).toFixed(2);
+  const adultTotal = +(discountedAdult * adults).toFixed(2);
+  const childTotal = isFreeKidsPromo(month) ? 0 : +(baseChild * children).toFixed(2);
+  const singleSup = (season === 'high' && adults === 1) ? SINGLE_SUP_RATE * PACKAGE_NIGHTS[pkg] : 0;
+  const total = +(adultTotal + childTotal + singleSup).toFixed(2);
+
+  const promo = [];
+  if (rate > 0) promo.push(`<span class='highlight'>Agent Rate -${(rate * 100).toFixed(0)}%</span>`);
+  if (isFreeKidsPromo(month)) promo.push("<span class='highlight'>Free Kids Promotion</span>");
+  if (singleSup > 0) promo.push(`<span class='highlight'>Single Supplement +${singleSup.toLocaleString()} THB</span>`);
+
+  const promoNote = promo.length ? promo.join('\n') : "Promotions: None";
+
+  document.getElementById("result").innerHTML = `
+<strong>Agent Info:</strong>
+Company: ${agent?.Company || 'N/A'}
+Email: ${agent?.["E-mail"] || 'N/A'}
+Code: ${agent?.Code || '-'}
+Profile: ${agent?.Profil || '-'}
+Condition: ${agent?.Condition || '-'}
+Rate: ${agent?.Rate || '0%'}
+Season: ${season}
+Package: ${pkg}
+Base Adult: ${baseAdult.toLocaleString()} × ${adults} = ${(baseAdult * adults).toLocaleString()}
+Base Child: ${baseChild.toLocaleString()} × ${children} = ${(baseChild * children).toLocaleString()}
+<span class="yellow-highlight">Discounted Adult: ${discountedAdult.toLocaleString()} × ${adults} = ${adultTotal.toLocaleString()}</span>
+<span class="yellow-highlight">Discounted Child: ${isFreeKidsPromo(month) ? "0" : `${baseChild.toLocaleString()} × ${children} = ${childTotal.toLocaleString()}`}</span>
+${singleSup > 0 ? `Single Supplement: ${singleSup.toLocaleString()}` : ""}
+------------------------------
+TOTAL: ${total.toLocaleString()} THB
+${promoNote}
+  `;
+}
+
+document.getElementById('excelFile').addEventListener('change', function(e) {
+  const reader = new FileReader();
+  reader.onload = function(evt) {
+    const data = new Uint8Array(evt.target.result);
+    const workbook = XLSX.read(data, { type: 'array' });
+    const sheet = workbook.Sheets[workbook.SheetNames[0]];
+    agentData = XLSX.utils.sheet_to_json(sheet);
+  };
+  reader.readAsArrayBuffer(e.target.files[0]);
+});
+
+document.getElementById('agentSearch').addEventListener('input', function() {
+  const keyword = this.value.toLowerCase();
+  const container = document.getElementById('agentList');
+  container.innerHTML = '';
+  if (!keyword) return container.style.display = 'none';
+  const filtered = agentData.filter(a => a.Company?.toLowerCase().includes(keyword) || a["E-mail"]?.toLowerCase().includes(keyword));
+  filtered.slice(0, 10).forEach(agent => {
+    const div = document.createElement('div');
+    div.className = 'agent-item';
+    div.textContent = `${agent.Company || ''} (${agent["E-mail"] || ''})`;
+    div.onclick = () => {
+      document.getElementById('agentSearch').value = agent.Company;
+      document.getElementById('agentSearch').dataset.selected = JSON.stringify(agent);
+      container.style.display = 'none';
+    };
+    container.appendChild(div);
+  });
+  container.style.display = filtered.length ? 'block' : 'none';
+});
+</script>
+
+</body>
+</html>
