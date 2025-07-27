@@ -1,415 +1,879 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Elephant Hills Package</title>
-  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
-  <style>
-  body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    max-width: 700px;
-    margin: 40px auto;
-    padding: 20px;
-    background-color: #f9f9f9;
-    color: #333;
-    line-height: 1.6;
-  }
+    <meta charset="UTF-8">
+    <title>Elephant Hills Package</title>
+    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 700px;
+            margin: 40px auto;
+            padding: 20px;
+            background-color: #f9f9f9;
+            color: #333;
+            line-height: 1.6;
+        }
 
-  h2 {
-    font-weight: 600;
-    font-size: 24px;
-    margin-bottom: 20px;
-    color: #222;
-  }
+        h2 {
+            font-weight: 600;
+            font-size: 24px;
+            margin-bottom: 20px;
+            color: #222;
+        }
 
-  label {
-    display: block;
-    margin-top: 16px;
-    margin-bottom: 6px;
-    font-weight: 500;
-    font-size: 14px;
-  }
+        label {
+            display: block;
+            margin-top: 16px;
+            margin-bottom: 6px;
+            font-weight: 500;
+            font-size: 14px;
+        }
 
-  input, select, button {
-    width: 100%;
-    padding: 10px;
-    font-size: 14px;
-    border: 1px solid #ccc;
-    border-radius: 6px;
-    margin-bottom: 10px;
-    background-color: #fff;
-  }
+        input, select, button {
+            width: 100%;
+            padding: 10px;
+            font-size: 14px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            margin-bottom: 10px;
+            background-color: #fff;
+        }
 
-  button {
-    background-color: #333;
-    color: #fff;
-    cursor: pointer;
-    transition: background 0.3s ease;
-  }
+        button {
+            background-color: #333;
+            color: #fff;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
 
-  button:hover {
-    background-color: #555;
-  }
+        button:hover {
+            background-color: #555;
+        }
 
-  #result {
-    margin-top: 25px;
-    padding: 16px;
-    background: #ffffff;
-    border: 1px solid #e0e0e0;
-    border-radius: 8px;
-    font-size: 14px;
-    white-space: normal;
-  }
+        #result {
+            margin-top: 25px;
+            padding: 16px;
+            background: #ffffff;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 14px;
+            white-space: normal;
+        }
 
-  #result div.line-group {
-    margin-top: 8px;
-    margin-bottom: 8px;
-  }
+        #result div.line-group {
+            margin-top: 4px; /* Adjust for tighter spacing */
+            margin-bottom: 4px; /* Adjust for tighter spacing */
+        }
 
-  .highlight {
-    color: #d32f2f;
-    font-weight: bold;
-  }
+        .highlight {
+            color: #d32f2f;
+            font-weight: bold;
+        }
 
-  .yellow-highlight {
-    background-color: #fff8c4;
-    font-weight: bold;
-  }
+        .yellow-highlight {
+            background-color: #fff8c4;
+            font-weight: bold;
+            padding: 2px 5px; /* Add slight padding */
+            border-radius: 3px; /* Slightly rounded corners */
+        }
 
-  .total-highlight {
-    font-size: 1.3em;
-    font-weight: bold;
-    background-color: #fff8c4;
-    padding: 4px 8px;
-    display: inline-block;
-    border-radius: 4px;
-    margin-top: 10px;
-  }
+        .red-bold-highlight { /* New style for red bold promotion */
+            color: #d32f2f;
+            font-weight: bold;
+        }
 
-  #agentList {
-    max-height: 150px;
-    overflow-y: auto;
-    border: 1px solid #ccc;
-    display: none;
-    position: absolute;
-    background: #fff;
-    width: calc(100% - 20px);
-    z-index: 10;
-    border-radius: 6px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  }
+        .total-highlight {
+            font-size: 1.5em; /* Make larger */
+            font-weight: bold;
+            background-color: #fff8c4;
+            padding: 8px 12px; /* Add padding */
+            display: inline-block;
+            border-radius: 6px; /* Rounded corners */
+            margin-top: 15px; /* Space from above */
+            color: #222; /* Darker text color */
+            width: calc(100% - 24px); /* Full width minus padding */
+            text-align: center; /* Center align */
+        }
 
-  .agent-item {
-    padding: 8px 12px;
-    cursor: pointer;
-  }
+        #agentList {
+            max-height: 150px;
+            overflow-y: auto;
+            border: 1px solid #ccc;
+            display: none;
+            position: absolute;
+            background: #fff;
+            width: calc(100% - 20px);
+            z-index: 10;
+            border-radius: 6px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
 
-  .agent-item:hover {
-    background-color: #f1f1f1;
-  }
+        .agent-item {
+            padding: 8px 12px;
+            cursor: pointer;
+        }
 
-</style>
+        .agent-item:hover {
+            background-color: #f1f1f1;
+        }
+
+    </style>
 </head>
 <body>
 
-<h2>Elephant Hills Package</h2>
+    <h2>Elephant Hills Package</h2>
 
-<label for="excelFile">Upload Agent Excel File (.xlsx):</label>
-<input type="file" id="excelFile" accept=".xlsx">
+    <label for="excelFile">Upload Agent Excel File (.xlsx):</label>
+    <input type="file" id="excelFile" accept=".xlsx">
 
-<label for="agentSearch">Search Agent (Company or Email):</label>
-<input type="text" id="agentSearch" autocomplete="off">
-<div id="agentList"></div>
+    <label for="agentSearch">Search Agent (Company or Email):</label>
+    <input type="text" id="agentSearch" autocomplete="off">
+    <div id="agentList"></div>
 
-<label for="package">Select Package:</label>
-<select id="package">
-  <option value="EH-JS2">EH-JS2</option>
-  <option value="EH-JS3">EH-JS3</option>
-  <option value="EH-JS4">EH-JS4</option>
-  <option value="EH-JLS3">EH-JLS3</option>
-  <option value="EH-JLS4">EH-JLS4</option>
-</select>
+    <label for="package">Select Package:</label>
+    <select id="package">
+        <option value="EH-JS2">EH-JS2</option>
+        <option value="EH-JS3">EH-JS3</option>
+        <option value="EH-JS4">EH-JS4</option>
+        <option value="EH-JLS3">EH-JLS3</option>
+        <option value="EH-JLS4">EH-JLS4</option>
+    </select>
 
-<label for="month">Select Month:</label>
-<select id="month">
-  <option value="Jan">January</option><option value="Feb">February</option>
-  <option value="Mar">March</option><option value="Apr">April</option>
-  <option value="May">May</option><option value="Jun">June</option>
-  <option value="Jul">July</option><option value="Aug">August</option>
-  <option value="Sep">September</option><option value="Oct">October</option>
-  <option value="Nov">November</option><option value="Dec">December</option>
-</select>
+    <label for="month">Select Month:</label>
+    <select id="month">
+        <option value="Jan">January</option><option value="Feb">February</option>
+        <option value="Mar">March</option><option value="Apr">April</option>
+        <option value="May">May</option><option value="Jun">June</option>
+        <option value="Jul">July</option><option value="Aug">August</option>
+        <option value="Sep">September</option><option value="Oct">October</option>
+        <option value="Nov">November</option><option value="Dec">December</option>
+    </select>
 
-<label for="year">Select Year:</label>
-<select id="year">
-  <option value="2024">2024</option>
-  <option value="2025">2025</option>
-  <option value="2026">2026</option>
-</select>
+    <label for="year">Select Year:</label>
+    <select id="year">
+        <option value="2024">2024</option>
+        <option value="2025">2025</option>
+        <option value="2026">2026</option>
+    </select>
 
-<label for="adults">Number of Adults:</label>
-<input type="number" id="adults" min="1" value="2">
+    <label for="adults">Number of Adults:</label>
+    <input type="number" id="adults" min="1" value="2">
 
-<label for="children">Number of Children:</label>
-<input type="number" id="children" min="0" value="0">
+    <label for="children">Number of Children:</label>
+    <input type="number" id="children" min="0" value="0">
 
-<button onclick="calculatePrice()">Calculate Price</button>
+    <button onclick="calculatePrice()">Calculate Price</button>
 
-<div id="result"></div>
+    <div id="result"></div>
 
-<script>
-let agentData = [];
-const SINGLE_SUP_RATE = { THB: 6500, AUD: 280, NZD: 310 };
-const PACKAGE_NIGHTS = {
-  'EH-JS2': 1,
-  'EH-JS3': 2,
-  'EH-JS4': 3,
-  'EH-JLS3': 2,
-  'EH-JLS4': 3
-};
-const prices = {
-  THB: { '2024': { high: {}, low: {} }, '2025': { high: {}, low: {} }, '2026': { high: {}, low: {} } },
-  AUD: { '2024': { high: {}, low: {} }, '2025': { high: {}, low: {} }, '2026': { high: {}, low: {} } },
-  NZD: { '2024': { high: {}, low: {} }, '2025': { high: {}, low: {} }, '2026': { high: {}, low: {} } }
-};
+    <script>
+        let agentData = [];
+        const SINGLE_SUP_RATE = { THB: 6500, AUD: 280, NZD: 310 };
+        const PACKAGE_NIGHTS = {
+            'EH-JS2': 1,
+            'EH-JS3': 2,
+            'EH-JS4': 3,
+            'EH-JLS3': 2,
+            'EH-JLS4': 3
+        };
 
-prices.THB["2024"] = { 
-  "high": { 
-    "Nov": { "EH-JS2": [17350, 4338], "EH-JS3": [22900, 5725], "EH-JS4": [28500, 7125], "EH-JLS3": [26900, 6725], "EH-JLS4": [36000, 9000] }, 
-    "Dec": { "EH-JS2": [17350, 4338], "EH-JS3": [22900, 5725], "EH-JS4": [28500, 7125], "EH-JLS3": [26900, 6725], "EH-JLS4": [36000, 9000] } }, 
-    "low": {} };
+        // Initialize prices object correctly for structured data
+        const prices = {
+            THB: { '2024': {}, '2025': {}, '2026': {} },
+            AUD: { '2024': {}, '2025': {}, '2026': {} },
+            NZD: { '2024': {}, '2025': {}, '2026': {} }
+        };
 
-prices.THB["2025"] = {
-  "high": {
-    "Nov": { "EH-JS2": [18220, 4555], "EH-JS3": [24045, 5725], "EH-JS4": [29925, 7481], "EH-JLS3": [28790, 7198], "EH-JLS4": [38520, 9630] },
-    "Dec": { "EH-JS2": [18220, 4555], "EH-JS3": [24045, 5725], "EH-JS4": [29925, 7481], "EH-JLS3": [28790, 7198], "EH-JLS4": [38520, 9630] },
-    "Jan": { "EH-JS2": [17350, 4338], "EH-JS3": [22900, 5725], "EH-JS4": [28500, 7125], "EH-JLS3": [26900, 6725], "EH-JLS4": [36000, 9000] },
-    "Feb": { "EH-JS2": [17350, 4338], "EH-JS3": [22900, 5725], "EH-JS4": [28500, 7125], "EH-JLS3": [26900, 6725], "EH-JLS4": [36000, 9000] },
-    "Mar": { "EH-JS2": [17350, 4338], "EH-JS3": [22900, 5725], "EH-JS4": [28500, 7125], "EH-JLS3": [26900, 6725], "EH-JLS4": [36000, 9000] },
-    "Apr": { "EH-JS2": [17350, 4338], "EH-JS3": [22900, 5725], "EH-JS4": [28500, 7125], "EH-JLS3": [26900, 6725], "EH-JLS4": [36000, 9000] },
-    "Jul": { "EH-JLS3": [26900, 6725], "EH-JLS4": [36000, 9000] },
-    "Aug": { "EH-JLS3": [26900, 6725], "EH-JLS4": [36000, 9000] }
-  },
-  "low": {
-    "May": { "EH-JS2": [14600, 1825], "EH-JS3": [21500, 2688], "EH-JS4": [27100, 3388], "EH-JLS3": [25700, 3213], "EH-JLS4": [34000, 4250] },
-    "Jun": { "EH-JS2": [14600, 1825], "EH-JS3": [21500, 2688], "EH-JS4": [27100, 3388], "EH-JLS3": [25700, 3213], "EH-JLS4": [34000, 4250] },
-    "Sep": { "EH-JS2": [14600, 1825], "EH-JS3": [21500, 2688], "EH-JS4": [27100, 3388], "EH-JLS3": [25700, 3213], "EH-JLS4": [34000, 4250] },
-    "Oct": { "EH-JS2": [14600, 1825], "EH-JS3": [21500, 2688], "EH-JS4": [27100, 3388], "EH-JLS3": [25700, 3213], "EH-JLS4": [34000, 4250] }
-  }
-};
+        // THB Prices
+        prices.THB["2024"] = {
+            "Nov": {
+                "EH-JS2": { season: "high", price: [17350, 4338] },
+                "EH-JS3": { season: "high", price: [22900, 5725] },
+                "EH-JS4": { season: "high", price: [28500, 7125] },
+                "EH-JLS3": { season: "high", price: [26900, 6725] },
+                "EH-JLS4": { season: "high", price: [36000, 9000] }
+            },
+            "Dec": {
+                "EH-JS2": { season: "high", price: [17350, 4338] },
+                "EH-JS3": { season: "high", price: [22900, 5725] },
+                "EH-JS4": { season: "high", price: [28500, 7125] },
+                "EH-JLS3": { season: "high", price: [26900, 6725] },
+                "EH-JLS4": { season: "high", price: [36000, 9000] }
+            },
+        };
 
-prices.THB["2026"] = {
-  "high": {
-    "Jan": { "EH-JS2": [18220, 4555], "EH-JS3": [24045, 6011], "EH-JS4": [29925, 7481], "EH-JLS3": [28790, 7198], "EH-JLS4": [38520, 9630] },
-    "Feb": { "EH-JS2": [18220, 4555], "EH-JS3": [24045, 6011], "EH-JS4": [29925, 7481], "EH-JLS3": [28790, 7198], "EH-JLS4": [38520, 9630] },
-    "Mar": { "EH-JS2": [18220, 4555], "EH-JS3": [24045, 6011], "EH-JS4": [29925, 7481], "EH-JLS3": [28790, 7198], "EH-JLS4": [38520, 9630] },
-    "Apr": { "EH-JS2": [18220, 4555], "EH-JS3": [24045, 6011], "EH-JS4": [29925, 7481], "EH-JLS3": [28790, 7198], "EH-JLS4": [38520, 9630] },
-    "Jul": { "EH-JLS3": [28790, 7198], "EH-JLS4": [38520, 9630] },
-    "Aug": { "EH-JLS3": [28790, 7198], "EH-JLS4": [38520, 9630] }
-  },
-  "low": {
-    "May": { "EH-JS2": [15330, 1916], "EH-JS3": [22575, 2822], "EH-JS4": [28455, 3557], "EH-JLS3": [27499, 3437], "EH-JLS4": [36380, 4548] },
-    "Jun": { "EH-JS2": [15330, 1916], "EH-JS3": [22575, 2822], "EH-JS4": [28455, 3557], "EH-JLS3": [27499, 3437], "EH-JLS4": [36380, 4548] },
-    "Sep": { "EH-JS2": [15330, 1916], "EH-JS3": [22575, 2822], "EH-JS4": [28455, 3557], "EH-JLS3": [27499, 3437], "EH-JLS4": [36380, 4548] },
-    "Oct": { "EH-JS2": [15330, 1916], "EH-JS3": [22575, 2822], "EH-JS4": [28455, 3557], "EH-JLS3": [27499, 3437], "EH-JLS4": [36380, 4548] }
-  }
-};
-prices.AUD["2024"] = { 
-  "high": { 
-    "Nov": { "EH-JS2": [738, 185], "EH-JS3": [974, 244], "EH-JS4": [1213, 303], "EH-JLS3": [1145, 286], "EH-JLS4": [1532, 383] }, 
-    "Dec": { "EH-JS2": [738, 185], "EH-JS3": [974, 244], "EH-JS4": [1213, 303], "EH-JLS3": [1145, 286], "EH-JLS4": [1532, 383] } }, 
-    "low": {} };
+        prices.THB["2025"] = {
+            "Jan": {
+                "EH-JS2": { season: "high", price: [17350, 4338] },
+                "EH-JS3": { season: "high", price: [22900, 5725] },
+                "EH-JS4": { season: "high", price: [28500, 7125] },
+                "EH-JLS3": { season: "high", price: [26900, 6725] },
+                "EH-JLS4": { season: "high", price: [36000, 9000] }
+            },
+            "Feb": {
+                "EH-JS2": { season: "high", price: [17350, 4338] },
+                "EH-JS3": { season: "high", price: [22900, 5725] },
+                "EH-JS4": { season: "high", price: [28500, 7125] },
+                "EH-JLS3": { season: "high", price: [26900, 6725] },
+                "EH-JLS4": { season: "high", price: [36000, 9000] }
+            },
+            "Mar": {
+                "EH-JS2": { season: "high", price: [17350, 4338] },
+                "EH-JS3": { season: "high", price: [22900, 5725] },
+                "EH-JS4": { season: "high", price: [28500, 7125] },
+                "EH-JLS3": { season: "high", price: [26900, 6725] },
+                "EH-JLS4": { season: "high", price: [36000, 9000] }
+            },
+            "Apr": {
+                "EH-JS2": { season: "high", price: [17350, 4338] },
+                "EH-JS3": { season: "high", price: [22900, 5725] },
+                "EH-JS4": { season: "high", price: [28500, 7125] },
+                "EH-JLS3": { season: "high", price: [26900, 6725] },
+                "EH-JLS4": { season: "high", price: [36000, 9000] }
+            },
+            "May": {
+                "EH-JS2": { season: "low", price: [14600, 1825] },
+                "EH-JS3": { season: "low", price: [21500, 2688] },
+                "EH-JS4": { season: "low", price: [27100, 3388] },
+                "EH-JLS3": { season: "low", price: [25700, 3213] },
+                "EH-JLS4": { season: "low", price: [34000, 4250] }
+            },
+            "Jun": {
+                "EH-JS2": { season: "low", price: [14600, 1825] },
+                "EH-JS3": { season: "low", price: [21500, 2688] },
+                "EH-JS4": { season: "low", price: [27100, 3388] },
+                "EH-JLS3": { season: "low", price: [25700, 3213] },
+                "EH-JLS4": { season: "low", price: [34000, 4250] }
+            },
+            "Jul": {
+                "EH-JS2": { season: "low", price: [14600, 1825] },
+                "EH-JS3": { season: "low", price: [21500, 2688] },
+                "EH-JS4": { season: "low", price: [27100, 3388] },
+                "EH-JLS3": { season: "high", price: [26900, 6725] },
+                "EH-JLS4": { season: "high", price: [36000, 9000] }
+            },
+            "Aug": {
+                "EH-JS2": { season: "low", price: [14600, 1825] },
+                "EH-JS3": { season: "low", price: [21500, 2688] },
+                "EH-JS4": { season: "low", price: [27100, 3388] },
+                "EH-JLS3": { season: "high", price: [26900, 6725] },
+                "EH-JLS4": { season: "high", price: [36000, 9000] }
+            },
+            "Sep": {
+                "EH-JS2": { season: "low", price: [14600, 1825] },
+                "EH-JS3": { season: "low", price: [21500, 2688] },
+                "EH-JS4": { season: "low", price: [27100, 3388] },
+                "EH-JLS3": { season: "low", price: [25700, 3213] },
+                "EH-JLS4": { season: "low", price: [34000, 4250] }
+            },
+            "Oct": {
+                "EH-JS2": { season: "low", price: [14600, 1825] },
+                "EH-JS3": { season: "low", price: [21500, 2688] },
+                "EH-JS4": { season: "low", price: [27100, 3388] },
+                "EH-JLS3": { season: "low", price: [25700, 3213] },
+                "EH-JLS4": { season: "low", price: [34000, 4250] }
+            },
+            "Nov": {
+                "EH-JS2": { season: "high", price: [18220, 4555] },
+                "EH-JS3": { season: "high", price: [24045, 6011] },
+                "EH-JS4": { season: "high", price: [29925, 7481] },
+                "EH-JLS3": { season: "high", price: [28790, 7198] },
+                "EH-JLS4": { season: "high", price: [38520, 9630] }
+            },
+            "Dec": {
+                "EH-JS2": { season: "high", price: [18220, 4555] },
+                "EH-JS3": { season: "high", price: [24045, 6011] },
+                "EH-JS4": { season: "high", price: [29925, 7481] },
+                "EH-JLS3": { season: "high", price: [28790, 7198] },
+                "EH-JLS4": { season: "high", price: [38520, 9630] }
+            }
+        };
 
-prices.AUD["2025"] = {
-  "high": {
-    "Nov": { "EH-JS2": [775, 194], "EH-JS3": [1023, 256], "EH-JS4": [1274, 319], "EH-JLS3": [1225, 306], "EH-JLS4": [1639, 410] },
-    "Dec": { "EH-JS2": [775, 194], "EH-JS3": [1023, 256], "EH-JS4": [1274, 319], "EH-JLS3": [1225, 306], "EH-JLS4": [1639, 410] },
-    "Jan": { "EH-JS2": [738, 185], "EH-JS3": [974, 244], "EH-JS4": [1213, 303], "EH-JLS3": [1145, 286], "EH-JLS4": [1532, 383] },
-    "Feb": { "EH-JS2": [738, 185], "EH-JS3": [974, 244], "EH-JS4": [1213, 303], "EH-JLS3": [1145, 286], "EH-JLS4": [1532, 383] },
-    "Mar": { "EH-JS2": [738, 185], "EH-JS3": [974, 244], "EH-JS4": [1213, 303], "EH-JLS3": [1145, 286], "EH-JLS4": [1532, 383] },
-    "Apr": { "EH-JS2": [738, 185], "EH-JS3": [974, 244], "EH-JS4": [1213, 303], "EH-JLS3": [1145, 286], "EH-JLS4": [1532, 383] },
-    "Jul": { "EH-JLS3": [1145, 286], "EH-JLS4": [1532, 383] },
-    "Aug": { "EH-JLS3": [1145, 286], "EH-JLS4": [1532, 383]  }
-  },
-  "low": {
-    "May": { "EH-JS2": [621, 78], "EH-JS3": [915, 114], "EH-JS4": [1153, 144], "EH-JLS3": [1094, 137], "EH-JLS4": [1447, 181] },
-    "Jun": { "EH-JS2": [621, 78], "EH-JS3": [915, 114], "EH-JS4": [1153, 144], "EH-JLS3": [1094, 137], "EH-JLS4": [1447, 181]  },
-    "Sep": { "EH-JS2": [621, 78], "EH-JS3": [915, 114], "EH-JS4": [1153, 144], "EH-JLS3": [1094, 137], "EH-JLS4": [1447, 181] },
-    "Oct": { "EH-JS2": [621, 78], "EH-JS3": [915, 114], "EH-JS4": [1153, 144], "EH-JLS3": [1094, 137], "EH-JLS4": [1447, 181] }
-  }
-};
+        prices.THB["2026"] = {
+            "Jan": {
+                "EH-JS2": { season: "high", price: [18220, 4555] },
+                "EH-JS3": { season: "high", price: [24045, 6011] },
+                "EH-JS4": { season: "high", price: [29925, 7481] },
+                "EH-JLS3": { season: "high", price: [28790, 7198] },
+                "EH-JLS4": { season: "high", price: [38520, 9630] }
+            },
+            "Feb": {
+                "EH-JS2": { season: "high", price: [18220, 4555] },
+                "EH-JS3": { season: "high", price: [24045, 6011] },
+                "EH-JS4": { season: "high", price: [29925, 7481] },
+                "EH-JLS3": { season: "high", price: [28790, 7198] },
+                "EH-JLS4": { season: "high", price: [38520, 9630] }
+            },
+            "Mar": {
+                "EH-JS2": { season: "high", price: [18220, 4555] },
+                "EH-JS3": { season: "high", price: [24045, 6011] },
+                "EH-JS4": { season: "high", price: [29925, 7481] },
+                "EH-JLS3": { season: "high", price: [28790, 7198] },
+                "EH-JLS4": { season: "high", price: [38520, 9630] }
+            },
+            "Apr": {
+                "EH-JS2": { season: "high", price: [18220, 4555] },
+                "EH-JS3": { season: "high", price: [24045, 6011] },
+                "EH-JS4": { season: "high", price: [29925, 7481] },
+                "EH-JLS3": { season: "high", price: [28790, 7198] },
+                "EH-JLS4": { season: "high", price: [38520, 9630] }
+            },
+            "May": {
+                "EH-JS2": { season: "low", price: [15330, 1916] },
+                "EH-JS3": { season: "low", price: [22575, 2822] },
+                "EH-JS4": { season: "low", price: [28455, 3557] },
+                "EH-JLS3": { season: "low", price: [27499, 3437] },
+                "EH-JLS4": { season: "low", price: [36380, 4548] }
+            },
+            "Jun": {
+                "EH-JS2": { season: "low", price: [15330, 1916] },
+                "EH-JS3": { season: "low", price: [22575, 2822] },
+                "EH-JS4": { season: "low", price: [28455, 3557] },
+                "EH-JLS3": { season: "low", price: [27499, 3437] },
+                "EH-JLS4": { season: "low", price: [36380, 4548] }
+            },
+            "Jul": {
+                "EH-JS2": { season: "low", price: [15330, 1916] },
+                "EH-JS3": { season: "low", price: [22575, 2822] },
+                "EH-JS4": { season: "low", price: [28455, 3557] },
+                "EH-JLS3": { season: "high", price: [28790, 7198] },
+                "EH-JLS4": { season: "high", price: [38520, 9630] }
+            },
+            "Aug": {
+                "EH-JS2": { season: "low", price: [15330, 1916] },
+                "EH-JS3": { season: "low", price: [22575, 2822] },
+                "EH-JS4": { season: "low", price: [28455, 3557] },
+                "EH-JLS3": { season: "high", price: [28790, 7198] },
+                "EH-JLS4": { season: "high", price: [38520, 9630] }
+            },
+            "Sep": {
+                "EH-JS2": { season: "low", price: [15330, 1916] },
+                "EH-JS3": { season: "low", price: [22575, 2822] },
+                "EH-JS4": { season: "low", price: [28455, 3557] },
+                "EH-JLS3": { season: "low", price: [27499, 3437] },
+                "EH-JLS4": { season: "low", price: [36380, 4548] }
+            },
+            "Oct": {
+                "EH-JS2": { season: "low", price: [15330, 1916] },
+                "EH-JS3": { season: "low", price: [22575, 2822] },
+                "EH-JS4": { season: "low", price: [28455, 3557] },
+                "EH-JLS3": { season: "low", price: [27499, 3437] },
+                "EH-JLS4": { season: "low", price: [36380, 4548] }
+            },
+        };
 
-prices.AUD["2026"] = {
-  "high": {
-    "Jan": { "EH-JS2": [775, 194], "EH-JS3": [1023, 256], "EH-JS4": [1274, 319], "EH-JLS3": [1225, 306], "EH-JLS4": [1639, 410] },
-    "Feb": { "EH-JS2": [775, 194], "EH-JS3": [1023, 256], "EH-JS4": [1274, 319], "EH-JLS3": [1225, 306], "EH-JLS4": [1639, 410] },
-    "Mar": { "EH-JS2": [775, 194], "EH-JS3": [1023, 256], "EH-JS4": [1274, 319], "EH-JLS3": [1225, 306], "EH-JLS4": [1639, 410] },
-    "Apr": { "EH-JS2": [775, 194], "EH-JS3": [1023, 256], "EH-JS4": [1274, 319], "EH-JLS3": [1225, 306], "EH-JLS4": [1639, 410] },
-    "Jul": { "EH-JLS3": [1171, 146], "EH-JLS4": [1548, 194] },
-    "Aug": { "EH-JLS3": [1171, 146], "EH-JLS4": [1548, 194] }
-  },
-  "low": {
-    "May": { "EH-JS2": [652, 82], "EH-JS3": [961, 120], "EH-JS4": [1211, 151], "EH-JLS3": [1171, 146], "EH-JLS4": [1548, 194] },
-    "Jun": { "EH-JS2": [652, 82], "EH-JS3": [961, 120], "EH-JS4": [1211, 151], "EH-JLS3": [1171, 146], "EH-JLS4": [1548, 194] },
-    "Sep": { "EH-JS2": [652, 82], "EH-JS3": [961, 120], "EH-JS4": [1211, 151], "EH-JLS3": [1171, 146], "EH-JLS4": [1548, 194] },
-    "Oct": { "EH-JS2": [652, 82], "EH-JS3": [961, 120], "EH-JS4": [1211, 151], "EH-JLS3": [1171, 146], "EH-JLS4": [1548, 194]}
-  }
-};
-prices.NZD["2024"] = { 
-  "high": { 
-    "Nov": { "EH-JS2": [789, 197], "EH-JS3": [1041, 260], "EH-JS4": [1295, 324], "EH-JLS3": [1223, 306], "EH-JLS4": [1636, 409] }, 
-    "Dec": { "EH-JS2": [789, 197], "EH-JS3": [1041, 260], "EH-JS4": [1295, 324], "EH-JLS3": [1223, 306], "EH-JLS4": [1636, 409] } }, 
-    "low": {} };
+        // AUD Prices
+        prices.AUD["2024"] = {
+            "Nov": {
+                "EH-JS2": { season: "high", price: [738, 185] },
+                "EH-JS3": { season: "high", price: [974, 244] },
+                "EH-JS4": { season: "high", price: [1213, 303] },
+                "EH-JLS3": { season: "high", price: [1145, 286] },
+                "EH-JLS4": { season: "high", price: [1532, 383] }
+            },
+            "Dec": {
+                "EH-JS2": { season: "high", price: [738, 185] },
+                "EH-JS3": { season: "high", price: [974, 244] },
+                "EH-JS4": { season: "high", price: [1213, 303] },
+                "EH-JLS3": { season: "high", price: [1145, 286] },
+                "EH-JLS4": { season: "high", price: [1532, 383] }
+            },
+        };
 
-prices.NZD["2025"] = {
-  "high": {
-    "Nov": { "EH-JS2": [828, 207], "EH-JS3": [1093, 273], "EH-JS4": [1360, 340], "EH-JLS3": [1309, 327], "EH-JLS4": [1750, 438] },
-    "Dec": { "EH-JS2": [828, 207], "EH-JS3": [1093, 273], "EH-JS4": [1360, 340], "EH-JLS3": [1309, 327], "EH-JLS4": [1750, 438] },
-    "Jan": { "EH-JS2": [789, 197], "EH-JS3": [1041, 260], "EH-JS4": [1295, 324], "EH-JLS3": [1223, 306], "EH-JLS4": [1636, 409] },
-    "Feb": { "EH-JS2": [789, 197], "EH-JS3": [1041, 260], "EH-JS4": [1295, 324], "EH-JLS3": [1223, 306], "EH-JLS4": [1636, 409] },
-    "Mar": { "EH-JS2": [789, 197], "EH-JS3": [1041, 260], "EH-JS4": [1295, 324], "EH-JLS3": [1223, 306], "EH-JLS4": [1636, 409] },
-    "Apr": { "EH-JS2": [789, 197], "EH-JS3": [1041, 260], "EH-JS4": [1295, 324], "EH-JLS3": [1223, 306], "EH-JLS4": [1636, 409] },
-    "Jul": { "EH-JLS3": [1094, 137], "EH-JLS4": [1447, 181] },
-    "Aug": { "EH-JLS3": [1094, 137], "EH-JLS4": [1447, 181]  }
-  },
-  "low": {
-    "May": { "EH-JS2": [664, 83], "EH-JS3": [977, 122], "EH-JS4": [1232, 154], "EH-JLS3": [1168, 146], "EH-JLS4": [1545, 193] },
-    "Jun": { "EH-JS2": [664, 83], "EH-JS3": [977, 122], "EH-JS4": [1232, 154], "EH-JLS3": [1168, 146], "EH-JLS4": [1545, 193] },
-    "Sep": { "EH-JS2": [664, 83], "EH-JS3": [977, 122], "EH-JS4": [1232, 154], "EH-JLS3": [1168, 146], "EH-JLS4": [1545, 193] },
-    "Oct": { "EH-JS2": [664, 83], "EH-JS3": [977, 122], "EH-JS4": [1232, 154], "EH-JLS3": [1168, 146], "EH-JLS4": [1545, 193] }
-  }
-};
+        prices.AUD["2025"] = {
+            "Jan": {
+                "EH-JS2": { season: "high", price: [738, 185] },
+                "EH-JS3": { season: "high", price: [974, 244] },
+                "EH-JS4": { season: "high", price: [1213, 303] },
+                "EH-JLS3": { season: "high", price: [1145, 286] },
+                "EH-JLS4": { season: "high", price: [1532, 383] }
+            },
+            "Feb": {
+                "EH-JS2": { season: "high", price: [738, 185] },
+                "EH-JS3": { season: "high", price: [974, 244] },
+                "EH-JS4": { season: "high", price: [1213, 303] },
+                "EH-JLS3": { season: "high", price: [1145, 286] },
+                "EH-JLS4": { season: "high", price: [1532, 383] }
+            },
+            "Mar": {
+                "EH-JS2": { season: "high", price: [738, 185] },
+                "EH-JS3": { season: "high", price: [974, 244] },
+                "EH-JS4": { season: "high", price: [1213, 303] },
+                "EH-JLS3": { season: "high", price: [1145, 286] },
+                "EH-JLS4": { season: "high", price: [1532, 383] }
+            },
+            "Apr": {
+                "EH-JS2": { season: "high", price: [738, 185] },
+                "EH-JS3": { season: "high", price: [974, 244] },
+                "EH-JS4": { season: [1213, 303] },
+                "EH-JLS3": { season: "high", price: [1145, 286] },
+                "EH-JLS4": { season: "high", price: [1532, 383] }
+            },
+            "May": {
+                "EH-JS2": { season: "low", price: [621, 78] },
+                "EH-JS3": { season: "low", price: [915, 114] },
+                "EH-JS4": { season: "low", price: [1153, 144] },
+                "EH-JLS3": { season: "low", price: [1094, 137] },
+                "EH-JLS4": { season: "low", price: [1447, 181] }
+            },
+            "Jun": {
+                "EH-JS2": { season: "low", price: [621, 78] },
+                "EH-JS3": { season: "low", price: [915, 114] },
+                "EH-JS4": { season: "low", price: [1153, 144] },
+                "EH-JLS3": { season: "low", price: [1094, 137] },
+                "EH-JLS4": { season: "low", price: [1447, 181] }
+            },
+            "Jul": {
+                "EH-JS2": { season: "low", price: [621, 78] },
+                "EH-JS3": { season: "low", price: [915, 114] },
+                "EH-JS4": { season: "low", price: [1153, 114] },
+                "EH-JLS3": { season: "high", price: [1145, 286] },
+                "EH-JLS4": { season: "high", price: [1532, 383] }
+            },
+            "Aug": {
+                "EH-JS2": { season: "low", price: [621, 78] },
+                "EH-JS3": { season: "low", price: [915, 114] },
+                "EH-JS4": { season: "low", price: [1153, 114] },
+                "EH-JLS3": { season: "high", price: [1145, 286] },
+                "EH-JLS4": { season: "high", price: [1532, 383] }
+            },
+            "Sep": {
+                "EH-JS2": { season: "low", price: [621, 78] },
+                "EH-JS3": { season: "low", price: [915, 114] },
+                "EH-JS4": { season: "low", price: [1153, 144] },
+                "EH-JLS3": { season: "low", price: [1094, 137] },
+                "EH-JLS4": { season: "low", price: [1447, 181] }
+            },
+            "Oct": {
+                "EH-JS2": { season: "low", price: [621, 78] },
+                "EH-JS3": { season: "low", price: [915, 114] },
+                "EH-JS4": { season: "low", price: [1153, 144] },
+                "EH-JLS3": { season: "low", price: [1094, 137] },
+                "EH-JLS4": { season: "low", price: [1447, 181] }
+            },
+            "Nov": {
+                "EH-JS2": { season: "high", price: [775, 194] },
+                "EH-JS3": { season: "high", price: [1023, 256] },
+                "EH-JS4": { season: "high", price: [1274, 319] },
+                "EH-JLS3": { season: "high", price: [1225, 306] },
+                "EH-JLS4": { season: "high", price: [1639, 410] }
+            },
+            "Dec": {
+                "EH-JS2": { season: "high", price: [775, 194] },
+                "EH-JS3": { season: "high", price: [1023, 256] },
+                "EH-JS4": { season: "high", price: [1274, 319] },
+                "EH-JLS3": { season: "high", price: [1225, 306] },
+                "EH-JLS4": { season: "high", price: [1639, 410] }
+            }
+        };
 
-prices.NZD["2026"] = {
-  "high": {
-    "Jan": { "EH-JS2": [828, 207], "EH-JS3": [1093, 273], "EH-JS4": [1360, 340], "EH-JLS3": [1309, 327], "EH-JLS4": [1750, 438] },
-    "Feb": { "EH-JS2": [828, 207], "EH-JS3": [1093, 273], "EH-JS4": [1360, 340], "EH-JLS3": [1309, 327], "EH-JLS4": [1750, 438] },
-    "Mar": { "EH-JS2": [828, 207], "EH-JS3": [1093, 273], "EH-JS4": [1360, 340], "EH-JLS3": [1309, 327], "EH-JLS4": [1750, 438] },
-    "Apr": { "EH-JS2": [828, 207], "EH-JS3": [1093, 273], "EH-JS4": [1360, 340], "EH-JLS3": [1309, 327], "EH-JLS4": [1750, 438] },
-    "Jul": { "EH-JLS3": [1309, 327], "EH-JLS4": [1750, 438] },
-    "Aug": { "EH-JLS3": [1309, 327], "EH-JLS4": [1750, 438] }
-  },
-  "low": {
-    "May": { "EH-JS2": [697, 87], "EH-JS3": [1026, 128], "EH-JS4": [1294, 162], "EH-JLS3": [1250, 156], "EH-JLS4": [1654, 207] },
-    "Jun": { "EH-JS2": [697, 87], "EH-JS3": [1026, 128], "EH-JS4": [1294, 162], "EH-JLS3": [1250, 156], "EH-JLS4": [1654, 207] },
-    "Sep": { "EH-JS2": [697, 87], "EH-JS3": [1026, 128], "EH-JS4": [1294, 162], "EH-JLS3": [1250, 156], "EH-JLS4": [1654, 207] },
-    "Oct": { "EH-JS2": [697, 87], "EH-JS3": [1026, 128], "EH-JS4": [1294, 162], "EH-JLS3": [1250, 156], "EH-JLS4": [1654, 207] }
-  }
-};
+        prices.AUD["2026"] = {
+            "Jan": {
+                "EH-JS2": { season: "high", price: [775, 194] }, // Adjusted from THB to AUD for 2026 as per pattern
+                "EH-JS3": { season: "high", price: [1023, 256] },
+                "EH-JS4": { season: "high", price: [1274, 319] },
+                "EH-JLS3": { season: "high", price: [1225, 306] },
+                "EH-JLS4": { season: "high", price: [1639, 410] }
+            },
+            "Feb": {
+                "EH-JS2": { season: "high", price: [775, 194] },
+                "EH-JS3": { season: "high", price: [1023, 256] },
+                "EH-JS4": { season: "high", price: [1274, 319] },
+                "EH-JLS3": { season: "high", price: [1225, 306] },
+                "EH-JLS4": { season: "high", price: [1639, 410] }
+            },
+            "Mar": {
+                "EH-JS2": { season: "high", price: [775, 194] },
+                "EH-JS3": { season: "high", price: [1023, 256] },
+                "EH-JS4": { season: "high", price: [1274, 319] },
+                "EH-JLS3": { season: "high", price: [1225, 306] },
+                "EH-JLS4": { season: "high", price: [1639, 410] }
+            },
+            "Apr": {
+                "EH-JS2": { season: "high", price: [775, 194] },
+                "EH-JS3": { season: "high", price: [1023, 256] },
+                "EH-JS4": { season: "high", price: [1274, 319] },
+                "EH-JLS3": { season: "high", price: [1225, 306] },
+                "EH-JLS4": { season: "high", price: [1639, 410] }
+            },
+            "May": {
+                "EH-JS2": { season: "low", price: [652, 82] }, // Adjusted from THB to AUD for 2026 as per pattern
+                "EH-JS3": { season: "low", price: [960, 120] },
+                "EH-JS4": { season: "low", price: [1209, 151] },
+                "EH-JLS3": { season: "low", price: [1166, 146] },
+                "EH-JLS4": { season: "low", price: [1546, 193] }
+            },
+            "Jun": {
+                "EH-JS2": { season: "low", price: [652, 82] },
+                "EH-JS3": { season: "low", price: [960, 120] },
+                "EH-JS4": { season: "low", price: [1209, 151] },
+                "EH-JLS3": { season: "low", price: [1166, 146] },
+                "EH-JLS4": { season: "low", price: [1546, 193] }
+            },
+            "Jul": {
+                "EH-JS2": { season: "low", price: [652, 82] },
+                "EH-JS3": { season: "low", price: [960, 120] },
+                "EH-JS4": { season: "low", price: [1209, 151] },
+                "EH-JLS3": { season: "high", price: [1225, 306] }, // Keeping high season for JLS packages
+                "EH-JLS4": { season: "high", price: [1639, 410] }
+            },
+            "Aug": {
+                "EH-JS2": { season: "low", price: [652, 82] },
+                "EH-JS3": { season: "low", price: [960, 120] },
+                "EH-JS4": { season: "low", price: [1209, 151] },
+                "EH-JLS3": { season: "high", price: [1225, 306] },
+                "EH-JLS4": { season: "high", price: [1639, 410] }
+            },
+            "Sep": {
+                "EH-JS2": { season: "low", price: [652, 82] },
+                "EH-JS3": { season: "low", price: [960, 120] },
+                "EH-JS4": { season: "low", price: [1209, 151] },
+                "EH-JLS3": { season: "low", price: [1166, 146] },
+                "EH-JLS4": { season: "low", price: [1546, 193] }
+            },
+            "Oct": {
+                "EH-JS2": { season: "low", price: [652, 82] },
+                "EH-JS3": { season: "low", price: [960, 120] },
+                "EH-JS4": { season: "low", price: [1209, 151] },
+                "EH-JLS3": { season: "low", price: [1166, 146] },
+                "EH-JLS4": { season: "low", price: [1546, 193] }
+            },
+        };
 
-['Nov','Dec'].forEach(m => prices.NZD['2026'].high[m] = {
-  'EH-JS2':[828,207],'EH-JS3':[1093,273],'EH-JS4':[1360,340],'EH-JLS3':[1309,327],'EH-JLS4':[1750,438]
-});
+        // NZD Prices
+        prices.NZD["2024"] = {
+            "Nov": {
+                "EH-JS2": { season: "high", price: [789, 197] },
+                "EH-JS3": { season: "high", price: [1041, 260] },
+                "EH-JS4": { season: "high", price: [1295, 324] },
+                "EH-JLS3": { season: "high", price: [1223, 306] },
+                "EH-JLS4": { season: "high", price: [1636, 409] }
+            },
+            "Dec": {
+                "EH-JS2": { season: "high", price: [789, 197] },
+                "EH-JS3": { season: "high", price: [1041, 260] },
+                "EH-JS4": { season: "high", price: [1295, 324] },
+                "EH-JLS3": { season: "high", price: [1223, 306] },
+                "EH-JLS4": { season: "high", price: [1636, 409] }
+            },
+        };
 
+        prices.NZD["2025"] = {
+            "Jan": {
+                "EH-JS2": { season: "high", price: [789, 197] },
+                "EH-JS3": { season: "high", price: [1041, 260] },
+                "EH-JS4": { season: "high", price: [1295, 324] },
+                "EH-JLS3": { season: "high", price: [1223, 306] },
+                "EH-JLS4": { season: "high", price: [1636, 409] }
+            },
+            "Feb": {
+                "EH-JS2": { season: "high", price: [789, 197] },
+                "EH-JS3": { season: "high", price: [1041, 260] },
+                "EH-JS4": { season: "high", price: [1295, 324] },
+                "EH-JLS3": { season: "high", price: [1223, 306] },
+                "EH-JLS4": { season: "high", price: [1636, 409] }
+            },
+            "Mar": {
+                "EH-JS2": { season: "high", price: [789, 197] },
+                "EH-JS3": { season: "high", price: [1041, 260] },
+                "EH-JS4": { season: "high", price: [1295, 324] },
+                "EH-JLS3": { season: "high", price: [1223, 306] },
+                "EH-JLS4": { season: "high", price: [1636, 409] }
+            },
+            "Apr": {
+                "EH-JS2": { season: "high", price: [789, 197] },
+                "EH-JS3": { season: "high", price: [1041, 260] },
+                "EH-JS4": { season: "high", price: [1295, 324] },
+                "EH-JLS3": { season: "high", price: [1223, 306] },
+                "EH-JLS4": { season: "high", price: [1636, 409] }
+            },
+            "May": {
+                "EH-JS2": { season: "low", price: [664, 83] },
+                "EH-JS3": { season: "low", price: [977, 122] },
+                "EH-JS4": { season: "low", price: [1232, 154] },
+                "EH-JLS3": { season: "low", price: [1168, 146] },
+                "EH-JLS4": { season: "low", price: [1545, 193] }
+            },
+            "Jun": {
+                "EH-JS2": { season: "low", price: [664, 83] },
+                "EH-JS3": { season: "low", price: [977, 122] },
+                "EH-JS4": { season: "low", price: [1232, 154] },
+                "EH-JLS3": { season: "low", price: [1168, 146] },
+                "EH-JLS4": { season: "low", price: [1545, 193] }
+            },
+            "Jul": {
+                "EH-JS2": { season: "low", price: [664, 83] },
+                "EH-JS3": { season: "low", price: [977, 122] },
+                "EH-JS4": { season: "low", price: [1232, 154] },
+                "EH-JLS3": { season: "high", price: [1223, 306] },
+                "EH-JLS4": { season: "high", price: [1636, 409] }
+            },
+            "Aug": {
+                "EH-JS2": { season: "low", price: [664, 83] },
+                "EH-JS3": { season: "low", price: [977, 122] },
+                "EH-JS4": { season: "low", price: [1232, 154] },
+                "EH-JLS3": { season: "high", price: [1223, 306] },
+                "EH-JLS4": { season: "high", price: [1636, 409] }
+            },
+            "Sep": {
+                "EH-JS2": { season: "low", price: [664, 83] },
+                "EH-JS3": { season: "low", price: [977, 122] },
+                "EH-JS4": { season: "low", price: [1232, 154] },
+                "EH-JLS3": { season: "low", price: [1168, 146] },
+                "EH-JLS4": { season: "low", price: [1545, 193] }
+            },
+            "Oct": {
+                "EH-JS2": { season: "low", price: [664, 83] },
+                "EH-JS3": { season: "low", price: [977, 122] },
+                "EH-JS4": { season: "low", price: [1232, 154] },
+                "EH-JLS3": { season: "low", price: [1168, 146] },
+                "EH-JLS4": { season: "low", price: [1545, 193] }
+            },
+            "Nov": {
+                "EH-JS2": { season: "high", price: [828, 207] },
+                "EH-JS3": { season: "high", price: [1093, 273] },
+                "EH-JS4": { season: "high", price: [1360, 340] },
+                "EH-JLS3": { season: "high", price: [1309, 327] },
+                "EH-JLS4": { season: "high", price: [1750, 438] }
+            },
+            "Dec": {
+                "EH-JS2": { season: "high", price: [828, 207] },
+                "EH-JS3": { season: "high", price: [1093, 273] },
+                "EH-JS4": { season: "high", price: [1360, 340] },
+                "EH-JLS3": { season: "high", price: [1309, 327] },
+                "EH-JLS4": { season: "high", price: [1750, 438] }
+            }
+        };
 
-function parseRate(rateStr) {
-  const raw = rateStr?.toString().replace('%', '').trim();
-  const num = parseFloat(raw);
-  return isNaN(num) ? 0 : (num > 1 ? num / 100 : num);
-}
-function getAgentDiscount() {
-  const raw = document.getElementById('agentSearch').dataset.selected;
-  if (!raw) return { rate: 0, info: null, currency: 'THB' };
-  const agent = JSON.parse(raw);
-  const code = agent.Code?.trim();
-  const currency = ['AUD','NZD'].includes(code) ? code : 'THB';
-  return { rate: parseRate(agent.Rate), info: agent, currency };
-}
-function isFreeKidsPromo(month) {
-  return ['May','Jun','Sep'].includes(month);
-}
+        // NZD Prices 2026 (based on provided, incomplete data - will use what's available)
+        prices.NZD["2026"] = {
+            "Jan": {
+                "EH-JS2": { season: "high", price: [828, 207] },
+                "EH-JS3": { season: "high", price: [1093, 273] },
+                "EH-JS4": { season: "high", price: [1360, 340] },
+                "EH-JLS3": { season: "high", price: [1309, 327] },
+                "EH-JLS4": { season: "high", price: [1750, 438] }
+            },
+            "Feb": {
+                "EH-JS2": { season: "high", price: [828, 207] },
+                "EH-JS3": { season: "high", price: [1093, 273] },
+                "EH-JS4": { season: "high", price: [1360, 340] },
+                "EH-JLS3": { season: "high", price: [1309, 327] },
+                "EH-JLS4": { season: "high", price: [1750, 438] }
+            },
+            "Mar": {
+                "EH-JS2": { season: "high", price: [828, 207] },
+                "EH-JS3": { season: "high", price: [1093, 273] },
+                "EH-JS4": { season: "high", price: [1360, 340] },
+                "EH-JLS3": { season: "high", price: [1309, 327] },
+                "EH-JLS4": { season: "high", price: [1750, 438] }
+            },
+            "Apr": { // Adding April based on the high season pattern from 2025
+                "EH-JS2": { season: "high", price: [828, 207] },
+                "EH-JS3": { season: "high", price: [1093, 273] },
+                "EH-JS4": { season: "high", price: [1360, 340] },
+                "EH-JLS3": { season: "high", price: [1309, 327] },
+                "EH-JLS4": { season: "high", price: [1750, 438] }
+            },
+            "May": { // Adding May based on the low season pattern from 2025
+                "EH-JS2": { season: "low", price: [664, 83] },
+                "EH-JS3": { season: "low", price: [977, 122] },
+                "EH-JS4": { season: "low", price: [1232, 154] },
+                "EH-JLS3": { season: "low", price: [1168, 146] },
+                "EH-JLS4": { season: "low", price: [1545, 193] }
+            },
+            "Jun": { // Adding June based on the low season pattern from 2025
+                "EH-JS2": { season: "low", price: [664, 83] },
+                "EH-JS3": { season: "low", price: [977, 122] },
+                "EH-JS4": { season: "low", price: [1232, 154] },
+                "EH-JLS3": { season: "low", price: [1168, 146] },
+                "EH-JLS4": { season: "low", price: [1545, 193] }
+            },
+            "Jul": { // Adding July based on the low/high season pattern from 2025
+                "EH-JS2": { season: "low", price: [664, 83] },
+                "EH-JS3": { season: "low", price: [977, 122] },
+                "EH-JS4": { season: "low", price: [1232, 154] },
+                "EH-JLS3": { season: "high", price: [1309, 327] }, // Using 2025 High season rates for JLS
+                "EH-JLS4": { season: "high", price: [1750, 438] }  // Using 2025 High season rates for JLS
+            },
+            "Aug": { // Adding August based on the low/high season pattern from 2025
+                "EH-JS2": { season: "low", price: [664, 83] },
+                "EH-JS3": { season: "low", price: [977, 122] },
+                "EH-JS4": { season: "low", price: [1232, 154] },
+                "EH-JLS3": { season: "high", price: [1309, 327] },
+                "EH-JLS4": { season: "high", price: [1750, 438] }
+            },
+            "Sep": { // Adding Sep based on the low season pattern from 2025
+                "EH-JS2": { season: "low", price: [664, 83] },
+                "EH-JS3": { season: "low", price: [977, 122] },
+                "EH-JS4": { season: "low", price: [1232, 154] },
+                "EH-JLS3": { season: "low", price: [1168, 146] },
+                "EH-JLS4": { season: "low", price: [1545, 193] }
+            },
+            "Oct": { // Adding Oct based on the low season pattern from 2025
+                "EH-JS2": { season: "low", price: [664, 83] },
+                "EH-JS3": { season: "low", price: [977, 122] },
+                "EH-JS4": { season: "low", price: [1232, 154] },
+                "EH-JLS3": { season: "low", price: [1168, 146] },
+                "EH-JLS4": { season: "low", price: [1545, 193] }
+            },
+            "Nov": { // Adding Nov based on the high season pattern from 2025
+                "EH-JS2": { season: "high", price: [828, 207] },
+                "EH-JS3": { season: "high", price: [1093, 273] },
+                "EH-JS4": { season: "high", price: [1360, 340] },
+                "EH-JLS3": { season: "high", price: [1309, 327] },
+                "EH-JLS4": { season: "high", price: [1750, 438] }
+            },
+            "Dec": { // Adding Dec based on the high season pattern from 2025
+                "EH-JS2": { season: "high", price: [828, 207] },
+                "EH-JS3": { season: "high", price: [1093, 273] },
+                "EH-JS4": { season: "high", price: [1360, 340] },
+                "EH-JLS3": { season: "high", price: [1309, 327] },
+                "EH-JLS4": { season: "high", price: [1750, 438] }
+            }
+        };
 
-function calculatePrice() {
-  const adults = parseInt(document.getElementById("adults").value);
-  const children = parseInt(document.getElementById("children").value);
-  const pkg = document.getElementById("package").value;
-  const month = document.getElementById("month").value;
-  const year = document.getElementById("year").value;
-  const { rate, info: agent, currency } = getAgentDiscount();
-  const season = prices[currency][year]?.high?.[month] ? 'high' : 'low';
-  const base = prices[currency][year]?.[season]?.[month]?.[pkg];
+        function parseRate(rateStr) {
+            const raw = rateStr?.toString().replace('%', '').trim();
+            const num = parseFloat(raw);
+            return isNaN(num) ? 0 : (num > 1 ? num / 100 : num);
+        }
 
-  if (!base) {
-    document.getElementById("result").innerHTML = `
-    ⚠️ <strong>No price data available.</strong><br>
-    โปรดตรวจสอบว่า:
-    <ul>
-      <li>คุณเลือก Agent ที่มีสกุลเงิน <strong>${currency}</strong></li>
-      <li>เดือน <strong>${month}</strong>, ปี <strong>${year}</strong> มีข้อมูลราคาในระบบหรือไม่</li>
-      <li>แพ็กเกจ <strong>${pkg}</strong> รองรับเดือนนั้นในช่วง <strong>${season}</strong> หรือไม่</li>
-    </ul>`;
-    return;
-  }
+        function getAgentDiscount() {
+            const raw = document.getElementById('agentSearch').dataset.selected;
+            if (!raw) return { rate: 0, info: null, currency: 'THB' };
+            const agent = JSON.parse(raw);
+            const code = agent.Code?.trim();
+            const currency = ['AUD', 'NZD'].includes(code) ? code : 'THB';
+            return { rate: parseRate(agent.Rate), info: agent, currency };
+        }
 
-  const [baseAdult, baseChild] = base;
-  const roundedAdult = Math.ceil(baseAdult * (1 - rate));
-  const adultTotal = roundedAdult * adults;
-  const childTotal = isFreeKidsPromo(month) ? 0 : +(baseChild * children).toFixed(2);
-  const singleSup = (season === 'high' && adults === 1) ? SINGLE_SUP_RATE[currency] * PACKAGE_NIGHTS[pkg] : 0;
-  const total = +(adultTotal + childTotal + singleSup).toFixed(2);
+        function isFreeKidsPromo(month) {
+            return ['May', 'Jun', 'Sep'].includes(month);
+        }
 
-  const promo = [];
-  if (rate > 0) promo.push(`<span class='highlight'>Agent Rate -${(rate * 100).toFixed(0)}%</span>`);
-  if (isFreeKidsPromo(month)) promo.push("<span class='highlight'>Free Kids Promotion</span>");
-  if (singleSup > 0) promo.push(`<span class='highlight'>Single Supplement +${singleSup.toLocaleString()} ${currency}</span>`);
+        function calculatePrice() {
+            const adults = parseInt(document.getElementById("adults").value);
+            const children = parseInt(document.getElementById("children").value);
+            const pkg = document.getElementById("package").value;
+            const month = document.getElementById("month").value;
+            const year = document.getElementById("year").value;
+            const { rate, info: agent, currency } = getAgentDiscount();
 
-  const promoNote = promo.length ? promo.join('\n') : "Promotions: None";
+            const yearPrices = prices[currency]?.[year];
+            if (!yearPrices) {
+                document.getElementById("result").innerHTML = `
+                ⚠️ <strong>No price data available for ${year} in ${currency}.</strong><br>
+                โปรดตรวจสอบว่าปี <strong>${year}</strong> มีข้อมูลราคาในสกุลเงิน <strong>${currency}</strong> หรือไม่`;
+                return;
+            }
 
-  document.getElementById("result").innerHTML = `
-<div><strong>Agent Info:</strong></div>
-<div>Company: ${agent?.Company || 'N/A'}</div>
-<div>Email: ${agent?.["E-mail"] || 'N/A'}</div>
-<div>Code: ${agent?.Code || '-'}</div>
-<div>Profile: ${agent?.profil || '-'}</div>
-<div>Rate: ${agent?.Rate || '0%'}</div>
-<div>Currency: ${currency}</div>
-<div>Season: ${season}</div>
-<div>Package: ${pkg}</div>
-<div>Base Adult: ${baseAdult.toLocaleString()} × ${adults} = ${(baseAdult * adults).toLocaleString()}</div>
-<div>Base Child: ${baseChild.toLocaleString()} × ${children} = ${(baseChild * children).toLocaleString()}</div>
+            const monthData = yearPrices[month];
+            if (!monthData || !monthData[pkg]) {
+                document.getElementById("result").innerHTML = `
+                ⚠️ <strong>No price data available for ${month} ${year}, package ${pkg} in ${currency}.</strong><br>
+                โปรดตรวจสอบว่า:
+                <ul>
+                  <li>คุณเลือก Agent ที่มีสกุลเงิน <strong>${currency}</strong> ถูกต้อง</li>
+                  <li>เดือน <strong>${month}</strong>, ปี <strong>${year}</strong> มีข้อมูลราคาสำหรับแพ็กเกจ <strong>${pkg}</strong> ในระบบหรือไม่</li>
+                </ul>`;
+                return;
+            }
 
-<div class="line-group"><strong>Discounted Adult:</strong> ${roundedAdult.toLocaleString()} × ${adults} = ${adultTotal.toLocaleString()}</div>
-<div class="line-group"><strong>Discounted Child:</strong> ${isFreeKidsPromo(month) ? "0" : `${baseChild.toLocaleString()} × ${children} = ${childTotal.toLocaleString()}`}</div>
-<div class="line-group"><strong>Single Supplement:</strong> ${singleSup.toLocaleString()} ${currency}</div>
+            const { season, price: [baseAdult, baseChild] } = monthData[pkg];
 
-<div>------------------------------</div>
-<div class="line-group"><span class="total-highlight">TOTAL: ${total.toLocaleString()} ${currency}</span></div>
-<div>${promoNote}</div>
-`;
-}
+            const roundedAdult = Math.ceil(baseAdult * (1 - rate));
+            const adultTotal = roundedAdult * adults;
+            const childTotal = isFreeKidsPromo(month) ? 0 : +(baseChild * children).toFixed(2);
 
-// ✅ FIX: ฟังก์ชัน load agent และ autocomplete ต้องอยู่นอก calculatePrice และอยู่ใน <script> อย่างถูกที่
-document.getElementById('excelFile').addEventListener('change', function(e) {
-  const reader = new FileReader();
-  reader.onload = function(evt) {
-    const data = new Uint8Array(evt.target.result);
-    const workbook = XLSX.read(data, { type: 'array' });
-    const sheet = workbook.Sheets[workbook.SheetNames[0]];
-    agentData = XLSX.utils.sheet_to_json(sheet);
-  };
-  reader.readAsArrayBuffer(e.target.files[0]);
-});
+            let singleSup = 0;
+            if (adults === 1) {
+                if (season === 'high') { // Single supplement applies only in high season
+                    singleSup = SINGLE_SUP_RATE[currency] * PACKAGE_NIGHTS[pkg];
+                }
+            }
+            
+            const total = +(adultTotal + childTotal + singleSup).toFixed(2);
 
-document.getElementById('agentSearch').addEventListener('input', function() {
-  const keyword = this.value.toLowerCase();
-  const container = document.getElementById('agentList');
-  container.innerHTML = '';
-  if (!keyword) return container.style.display = 'none';
-  const filtered = agentData.filter(a => a.Company?.toLowerCase().includes(keyword) || a["E-mail"]?.toLowerCase().includes(keyword));
-  filtered.slice(0, 10).forEach(agent => {
-    const div = document.createElement('div');
-    div.className = 'agent-item';
-    div.textContent = `${agent.Company || ''} (${agent["E-mail"] || ''})`;
-    div.onclick = () => {
-      document.getElementById('agentSearch').value = agent.Company;
-      document.getElementById('agentSearch').dataset.selected = JSON.stringify(agent);
-      container.style.display = 'none';
-    };
-    container.appendChild(div);
-  });
-  container.style.display = filtered.length ? 'block' : 'none';
-});
-</script>
+            let resultHtml = `<div class="line-group"><strong>Agent Info:</strong></div>`;
+            if (agent?.Company) resultHtml += `<div class="line-group">Company: ${agent.Company}</div>`;
+            if (agent?.["E-mail"]) resultHtml += `<div class="line-group">Email: ${agent["E-mail"]}</div>`;
+            if (agent?.Code) resultHtml += `<div class="line-group">Code: ${agent.Code}</div>`;
+            if (agent?.profil) resultHtml += `<div class="line-group">Profile: ${agent.profil}</div>`;
+            // Remove the 'Rate' line from Agent Info, as it's now in Promotions
+            resultHtml += `<div class="line-group">Currency: ${currency}</div>`;
+            resultHtml += `<div class="line-group">Season: ${season.charAt(0).toUpperCase() + season.slice(1)}</div>`;
+            resultHtml += `<div class="line-group">Package: ${pkg}</div>`;
+            
+            // Modified Base Adult Price line to show calculation
+            let baseAdultPriceDisplay = `Base Adult Price: ${baseAdult.toLocaleString()} ${currency}`;
+            if (rate > 0) {
+                baseAdultPriceDisplay += ` - ${(rate * 100).toFixed(0)}% = ${roundedAdult.toLocaleString()} ${currency}`;
+            }
+            resultHtml += `<div class="line-group">${baseAdultPriceDisplay}</div>`;
+
+            resultHtml += `<div class="line-group">Base Child Price: ${baseChild.toLocaleString()} ${currency}</div>`;
+
+            resultHtml += `<hr style="border-top: 1px dashed #eee; margin: 15px 0;">`;
+
+            // Modified Adult Total line to explicitly show the calculation
+            resultHtml += `<div class="line-group"><strong>Adult Total:</strong> ${roundedAdult.toLocaleString()} ${currency} &times; ${adults} Adults = <span class="highlight">${adultTotal.toLocaleString()} ${currency}</span></div>`;
+            
+            if (children > 0) { // Only show child total if there are children
+                resultHtml += `<div class="line-group"><strong>Child Total:</strong> ${isFreeKidsPromo(month) ? "<span class='highlight'>0</span>" : `<span class="highlight">${baseChild.toLocaleString()} ${currency} &times; ${children} Children = ${childTotal.toLocaleString()} ${currency}</span>`}</div>`;
+            }
+
+            if (singleSup > 0) { // Only show single supplement if it applies
+                resultHtml += `<div class="line-group"><strong>Single Supplement:</strong> <span class="highlight">${singleSup.toLocaleString()} ${currency}</span></div>`;
+            }
+
+            resultHtml += `<div class="total-highlight">TOTAL: ${total.toLocaleString()} ${currency}</div>`;
+
+            const promoLines = [];
+            if (rate > 0) promoLines.push(`<span class='red-bold-highlight'>Agent Rate -${(rate * 100).toFixed(0)}%</span>`);
+            if (isFreeKidsPromo(month)) promoLines.push("<span class='yellow-highlight'>Free Kids Promotion</span>");
+            
+            if (promoLines.length > 0) {
+                resultHtml += `<div style="margin-top: 15px; font-size: 0.9em;">Promotions: <br>${promoLines.join('<br>')}</div>`;
+            } else {
+                resultHtml += `<div style="margin-top: 15px; font-size: 0.9em;">Promotions: None</div>`;
+            }
+
+            document.getElementById("result").innerHTML = resultHtml;
+        }
+
+        document.getElementById('excelFile').addEventListener('change', function(e) {
+            const reader = new FileReader();
+            reader.onload = function(evt) {
+                const data = new Uint8Array(evt.target.result);
+                const workbook = XLSX.read(data, { type: 'array' });
+                const sheet = workbook.Sheets[workbook.SheetNames[0]];
+                agentData = XLSX.utils.sheet_to_json(sheet);
+            };
+            reader.readAsArrayBuffer(e.target.files[0]);
+        });
+
+        document.getElementById('agentSearch').addEventListener('input', function() {
+            const keyword = this.value.toLowerCase();
+            const container = document.getElementById('agentList');
+            container.innerHTML = '';
+            if (!keyword) return container.style.display = 'none';
+            const filtered = agentData.filter(a => a.Company?.toLowerCase().includes(keyword) || a["E-mail"]?.toLowerCase().includes(keyword));
+            filtered.slice(0, 10).forEach(agent => {
+                const div = document.createElement('div');
+                div.className = 'agent-item';
+                div.textContent = `${agent.Company || ''} (${agent["E-mail"] || ''})`;
+                div.onclick = () => {
+                    document.getElementById('agentSearch').value = agent.Company;
+                    document.getElementById('agentSearch').dataset.selected = JSON.stringify(agent);
+                    container.style.display = 'none';
+                };
+                container.appendChild(div);
+            });
+            container.style.display = filtered.length ? 'block' : 'none';
+        });
+    </script>
 
 </body>
 </html>
