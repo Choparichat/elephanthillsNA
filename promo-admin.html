@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Promotion Admin</title>
+    <link rel="stylesheet" href="style.css"> 
+    <style>
+        /* เพิ่มสไตล์เฉพาะกิจสำหรับหน้า Admin */
+        #rule-list { margin-top: 20px; }
+        .rule-item { 
+            background: #fff; 
+            padding: 15px; 
+            border-radius: 6px; 
+            margin-bottom: 10px; 
+            border: 1px solid #eee; 
+        }
+        .rule-item h3 { margin: 0 0 10px 0; }
+    </style>
+</head>
+<body>
+
+    <h2>Promotion Admin Panel</h2>
+
+    <div id="rule-list">
+        <h3>Current Promotion Rules:</h3>
+        </div>
+
+    <hr>
+
+    <div id="create-form">
+        <h2>Create New Rule</h2>
+
+        <label for="rule-id">Rule ID (e.g., 'PROMO_NEW_YEAR')</label>
+        <input type="text" id="rule-id">
+
+        <label for="rule-name">Rule Name (e.g., 'New Year 15% OFF')</label>
+        <input type="text" id="rule-name">
+
+        <button id="save-rule-btn">Save New Rule</button>
+    </div>
+
+    <script src="data.js"></script>
+    </body>
+</html>
