@@ -1,0 +1,114 @@
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    max-width: 700px;
+    margin: 40px auto;
+    padding: 20px;
+    background-color: #f9f9f9;
+    color: #333;
+    line-height: 1.6;
+}
+
+h2 {
+    font-weight: 600;
+    font-size: 24px;
+    margin-bottom: 20px;
+    color: #222;
+}
+
+label {
+    display: block;
+    margin-top: 16px;
+    margin-bottom: 6px;
+    font-weight: 500;
+    font-size: 14px;
+}
+
+input, select, button {
+    width: 100%;
+    padding: 10px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    margin-bottom: 10px;
+    background-color: #fff;
+}
+
+button {
+    background-color: #333;
+    color: #fff;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+button:hover {
+    background-color: #555;
+}
+
+#result {
+    margin-top: 25px;
+    padding: 16px;
+    background: #ffffff;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    font-size: 14px;
+    white-space: normal;
+}
+
+#result div.line-group {
+    margin-top: 4px; /* Adjust for tighter spacing */
+    margin-bottom: 4px; /* Adjust for tighter spacing */
+}
+
+.highlight {
+    color: #d32f2f;
+    font-weight: bold;
+}
+
+.yellow-highlight {
+    background-color: #fff8c4;
+    font-weight: bold;
+    padding: 2px 5px; /* Add slight padding */
+    border-radius: 3px; /* Slightly rounded corners */
+}
+
+.red-bold-highlight { /* New style for red bold promotion */
+    color: #d32f2f;
+    font-weight: bold;
+}
+
+.total-highlight {
+    font-size: 1.5em; /* Make larger */
+    font-weight: bold;
+    background-color: #fff8c4;
+    padding: 8px 12px; /* Add padding */
+    display: inline-block;
+    border-radius: 6px; /* Rounded corners */
+    margin-top: 15px; /* Space from above */
+    color: #222; /* Darker text color */
+    width: calc(100% - 24px); /* Full width minus padding */
+    text-align: center; /* Center align */
+}
+
+#agentList {
+    max-height: 150px;
+    overflow-y: auto;
+    border: 1px solid #ccc;
+    display: none;
+    position: absolute;
+    background: #fff;
+    width: calc(100% - 20px);
+    z-index: 10;
+    border-radius: 6px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.agent-item {
+    padding: 8px 12px;
+    cursor: pointer;
+}
+
+.agent-item:hover {
+    background-color: #f1f1f1;
+}
+
